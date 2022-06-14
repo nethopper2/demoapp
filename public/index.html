@@ -4,14 +4,69 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="icon" href="favicon.ico">
+    <title>Nethopper Demo App</title>
   </head>
   <body>
+    <div id="app">
+      <div class="row">
+        <!-- <div class="column">
+          <img alt="Nethopper logo" src="src/assets/cox-edge.png" width="250">
+        </div> -->
+        <div class="column">
+          <img alt="Nethopper logo" src="nethopper-logo.png" width="250">
+        </div>
+      </div>
+
+      <div class="hello">
+        <h1>Welcome to the nethopper demo app</h1>
+
+        <hr>
+        <h2>You have reached the frontend</h2>
+        <p>
+          ... running in a Kubernetes cluster named <b id="myClusterName"></b>
+        </p>
+
+        <hr>
+        <h2 id="isConnectedToBackend1"></h2>
+        <p id="isConnectedToBackend2">
+        </p>
+
+        <hr>
+        <p id="timer"></p>
+      </div>
+
+    </div>
+
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but this web page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
     <!-- built files will be auto injected -->
+
+    <script>
+      var timer = 0
+      // Update the timer every 1 second
+      var x = setInterval(function() {
+        timer = timer + 1
+        document.getElementById("timer").innerHTML = "Timer = " + timer;
+      }, 1000);
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.on('env', function(env) {
+      // console.log(env);
+      const envObj = JSON.parse(env)
+      document.getElementById("myClusterName").innerHTML = envObj.myClusterName;
+      if (envObj.backendClusterName && envObj.backendClusterName != "undefined") {
+        document.getElementById("isConnectedToBackend1").innerHTML = "It IS connected to a backend"
+        document.getElementById("isConnectedToBackend2").innerHTML = "... running in a Kubernetes cluster named <b> " + envObj.backendClusterName + " </b>"
+      } else {
+        document.getElementById("isConnectedToBackend1").innerHTML = "It IS NOT connected to a backend"
+        document.getElementById("isConnectedToBackend2").innerHTML = ""
+      }
+       
+    });
+    </script>
   </body>
 </html>
