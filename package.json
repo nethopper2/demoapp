@@ -1,27 +1,21 @@
 {
-  "name": "frontend-v3",
-  "version": "0.1.0",
+  "name": "nethopper-demo",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "prod": "serve -s dist -l 8080"
-
+    "dev": "node apiServer.js",
+    "build": "sudo docker build . -t nethopper/demoapp:$npm_package_version",
+    "push": "sudo docker push nethopper/demoapp:$npm_package_version"
   },
   "dependencies": {
-    "axios": "^0.25.0",
-    "core-js": "^3.6.5",
-    "vue": "^2.6.11"
+    "request": "^2.88.2",
+    "socket.io": "^4.5.1",
+    "url": "^0.11.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "vue-template-compiler": "^2.6.11"
+    "eslint-plugin-vue": "^6.2.2"
   },
   "eslintConfig": {
     "root": true,
@@ -29,7 +23,6 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
       "eslint:recommended"
     ],
     "parserOptions": {
