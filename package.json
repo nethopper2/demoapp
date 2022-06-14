@@ -3,7 +3,9 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "dev": "node apiServer.js"
+    "dev": "node apiServer.js",
+    "build": "sudo docker build . -t nethopper/demoapp:$npm_package_version",
+    "push": "sudo docker push nethopper/demoapp:$npm_package_version"
   },
   "dependencies": {
     "request": "^2.88.2",

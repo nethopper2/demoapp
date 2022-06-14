@@ -11,7 +11,26 @@
 npm install
 ```
 
-### Cfor development
+### development and test process
+pick two VMs (or hosts) on which to test:
+- on each, set ENV:
+```
+export MYCLUSTERNAME=VM1
+export MYCLUSTERNAME=VM2
+```
+- on each, run the nodejs
 ```
 npm run dev
 ```
+Open a browser to port 8080 on each VM, and you should see  a web page whic shows the ENVs.
+Run an end to end test using 2 Kubernetes clusters
+
+# Docker Build Process
+- Build a docker container
+  - sudo usermod -aG docker $USER
+  - sudo npm run build
+  - NOTE: this will create a container, and upload it to nethopper's dockerhub.
+  
+# Docker Push/publish process
+  - sudo npm run push
+  - NOTE: after building the container, this pushes it to nethoppers dockerhub
