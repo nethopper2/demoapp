@@ -114,7 +114,7 @@
           </div>
           <div class="cluster-details">
             ... running in a Kubernetes cluster named 
-            <span class="cluster-name" id="bakcendClusterName"></span>
+            <span class="cluster-name" id="backendClusterName"></span>
           </div>
         </div>
 
@@ -147,7 +147,7 @@
       //     statusElement.classList.remove("cluster-status-down")
       //     statusElement.classList.add("cluster-status-up")
       //     statusElement.innerHTML = "IS"
-      //     document.getElementById("bakcendClusterName").innerHTML = 'AWS-EAST'
+      //     document.getElementById("backendClusterName").innerHTML = 'AWS-EAST'
       //     document.getElementById("linkImg").src = "link_black_24dp.svg"
       //     toggle = false
       //   } else {
@@ -156,7 +156,7 @@
       //     statusElement.classList.remove("cluster-status-up")
       //     statusElement.classList.add("cluster-status-down")
       //     statusElement.innerHTML = "IS NOT"
-      //     document.getElementById("bakcendClusterName").innerHTML = ""
+      //     document.getElementById("backendClusterName").innerHTML = ""
       //     document.getElementById("linkImg").src = "link_off_black_24dp.svg"
       //     toggle = true
       //   }
@@ -177,20 +177,20 @@
       socket.on('env', function(env) {
       // console.log(env);
       const envObj = JSON.parse(env)
-        document.getElementById("frontendClusterName").innerHTML = envObj.frontendClusterName;
+        document.getElementById("frontendClusterName").innerHTML = envObj.myClusterName;
         if (envObj.backendClusterName && envObj.backendClusterName !== "undefined") {
           const statusElement = document.getElementById("connectionStatus")
           statusElement.classList.remove("cluster-status-down")
           statusElement.classList.add("cluster-status-up")
           statusElement.innerHTML = "IS"
-          document.getElementById("bakcendClusterName").innerHTML = envObj.backendClusterName
+          document.getElementById("backendClusterName").innerHTML = envObj.backendClusterName
           document.getElementById("linkImg").src = "link_black_24dp.svg"
       } else {
           const statusElement = document.getElementById("connectionStatus")
           statusElement.classList.remove("cluster-status-up")
           statusElement.classList.add("cluster-status-down")
           statusElement.innerHTML = "IS NOT"
-          document.getElementById("bakcendClusterName").innerHTML = ""
+          document.getElementById("backendClusterName").innerHTML = ""
           document.getElementById("linkImg").src = "link_off_black_24dp.svg"
       }
        
