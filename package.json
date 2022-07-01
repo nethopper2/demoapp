@@ -1,11 +1,12 @@
 {
   "name": "nethopper-demo",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "dev": "node apiServer.js",
     "build": "sudo docker build . -t nethopper/demoapp:$npm_package_version",
-    "push": "sudo docker push nethopper/demoapp:$npm_package_version"
+    "push": "sudo docker push nethopper/demoapp:$npm_package_version",
+    "publish": "sudo docker build . -t nethopper/demoapp:latest && sudo docker push nethopper/demoapp:latest"
   },
   "dependencies": {
     "request": "^2.88.2",

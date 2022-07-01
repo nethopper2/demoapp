@@ -113,7 +113,7 @@
             connected to a backend
           </div>
           <div class="cluster-details">
-            ... running in a Kubernetes cluster named 
+            <span id="backendClusterStatus"></span> 
             <span class="cluster-name" id="backendClusterName"></span>
           </div>
         </div>
@@ -183,6 +183,7 @@
           statusElement.classList.remove("cluster-status-down")
           statusElement.classList.add("cluster-status-up")
           statusElement.innerHTML = "IS"
+          document.getElementById("backendClusterStatus").innerHTML = '... running in a Kubernetes cluster named'
           document.getElementById("backendClusterName").innerHTML = envObj.backendClusterName
           document.getElementById("linkImg").src = "link_black_24dp.svg"
       } else {
@@ -190,6 +191,7 @@
           statusElement.classList.remove("cluster-status-up")
           statusElement.classList.add("cluster-status-down")
           statusElement.innerHTML = "IS NOT"
+          document.getElementById("backendClusterStatus").innerHTML = ''
           document.getElementById("backendClusterName").innerHTML = ""
           document.getElementById("linkImg").src = "link_off_black_24dp.svg"
       }

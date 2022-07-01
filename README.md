@@ -31,6 +31,10 @@ Run an end to end test using 2 Kubernetes clusters
   - sudo npm run build
   - NOTE: this will create a container, and upload it to nethopper's dockerhub.
   
-# Docker Push/publish process
+# Docker Push process
   - sudo npm run push
-  - NOTE: after building the container, this pushes it to nethoppers dockerhub
+  - NOTE: after building the container, this pushes it to nethoppers dockerhub as the current version (ie 1.0.2)
+
+# Docker Publish process
+  - sudo npm run publish
+  - NOTE: after testing the container, this pushes it to nethoppers dockerhub as the LATEST version

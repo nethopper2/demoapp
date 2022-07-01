@@ -52,6 +52,12 @@ var server = http.createServer(function (req, res) {
     res.writeHead(200, {"Content-Type": "application/json"});
     return res.end(json);
   }
+  if (reqpath == '/text') {
+    // console.log('/api request')
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/plain');
+    return res.end('You have reached a backend running in a cluster named ' + process.env.VUE_APP_MYCLUSTERNAME + '\n');
+}
   var file = path.join(dir, reqpath.replace(/\/$/, '/index.html'));
   if (file.indexOf(dir + path.sep) !== 0) {
       res.statusCode = 403;
@@ -82,13 +88,19 @@ startLoop(io)
 
 // (3) request MYCLUSTERNAME and MYBACKENDCLUSTERNAME from backend:8080/api
 async function getBackendAPI () {
-  request('http://backend:8080/api', function (error, response, body) {
+  //console.log('backend request being made')
+  const options = {
+    url:  'http://backend:8080/api',
+    timeout: 5000
+  }
+  request(options, function (error, response, body) {
     // console.error('error:', error) // Print the error if one occurred
     // console.log('statusCode:', response && response.statusCode) // Print the response status code if a response was received
     // console.log('body:', body); // Print the HTML for the Google homepage.
     if (error) {
       // cannot reach backend
       process.env.VUE_APP_MYBACKENDCLUSTERNAME = 'undefined'
+      //console.log('backend request failed')
       return
     } else {
       bodyObj = JSON.parse(body)
@@ -99,6 +111,8 @@ async function getBackendAPI () {
       } else {
         process.env.VUE_APP_MYBACKENDCLUSTERNAME = "undefined"
       }
+      //console.log('backend request succeeded, backend = ' + process.env.VUE_APP_MYBACKENDCLUSTERNAME)
+
       return
     }
   })
