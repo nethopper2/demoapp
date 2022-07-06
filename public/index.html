@@ -6,6 +6,70 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="favicon.ico">
     <title>Nethopper Demo App</title>
+    <style>
+      body  {
+        background-image: url("header-bg.jpg");
+        background-color: #dfcdcd;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #ffffff;
+        text-align: center;
+        margin: 30px;
+      }
+      hr {
+        border: none;
+        height: 1px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        background-color: #444;
+      }      
+      .title {
+        margin-top: 10px;
+        font-weight: 700;
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        font-weight: 500;
+        font-size: 1.5em;
+        margin-top: 10px;
+      }
+      .cluster {
+        margin-left: 0px;
+        padding: 15px;
+        border: 1px solid #ccc!important;
+        border-radius: 16px;
+      }
+      .cluster-title {
+        margin-top: 20px;
+        font-weight: 800;
+        font-size: 1.3em;
+        text-align: left;
+      }
+      .cluster-details {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        margin-left: 20px;
+        text-align: left;
+      }  
+      .cluster-name {
+        margin-left: 5px;
+        font-weight: 800;
+        font-size: 1.1em;
+        color: #53cd1d
+      } 
+      .cluster-status-down {
+        color: #f44336;
+      }  
+      .cluster-status-up {
+        color: #53cd1d;
+      }  
+      .svg {
+        width: 100%;
+        height: 50px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      </style>
   </head>
   <body>
     <div id="app">
@@ -13,42 +77,98 @@
         <!-- <div class="column">
           <img alt="Nethopper logo" src="src/assets/cox-edge.png" width="250">
         </div> -->
-        <div class="column">
-          <img alt="Nethopper logo" src="nethopper-logo.png" width="250">
+        <div class="title">
+          <img alt="Nethopper logo" src="nethopper.png" width="250">
         </div>
       </div>
 
-      <div class="hello">
-        <h1>Welcome to the nethopper demo app</h1>
+      <div>
+        <div class="title">
+          Welcome!
+        </div>
+        <div class="subtitle">
+          Nethopper Demo Application
+        </div>
 
         <hr>
-        <h2>You have reached the frontend</h2>
-        <p>
-          ... running in a Kubernetes cluster named <b id="myClusterName"></b>
-        </p>
+        <div class="cluster">
+          <div class="cluster-title">
+            You have reached the frontend
+          </div>
+          <div class="cluster-details">
+            ... running in a Kubernetes cluster named 
+            <span class="cluster-name" id="frontendClusterName"></span>
+          </div>
+        </div>
+
+        <img src="link_off_black_24dp.svg" class="svg" id="linkImg">
+
+        <!-- backend status -->
+        <div class="cluster">
+          <div class="cluster-title">
+            It 
+            <span class="cluster-status-down not-connected" id="connectionStatus">
+              IS NOT
+            </span>
+            connected to a backend
+          </div>
+          <div class="cluster-details">
+            <span id="backendClusterStatus"></span> 
+            <span class="cluster-name" id="backendClusterName"></span>
+          </div>
+        </div>
 
         <hr>
-        <h2 id="isConnectedToBackend1"></h2>
-        <p id="isConnectedToBackend2">
-        </p>
-
-        <hr>
-        <p id="timer"></p>
+        <div class="timer">
+          Elapse time: <span id="timer">0</span>s
+        </div>
       </div>
 
     </div>
 
     <noscript>
-      <strong>We're sorry but this web page doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>
+        We're sorry but this web page doesn't work properly without 
+        JavaScript enabled. Please enable it to continue.
+      </strong>
     </noscript>
     <!-- built files will be auto injected -->
+
+    <script>
+      /**
+       * uncomment this code for development and test without socket
+       */
+      
+      // let toggle = true
+      // setInterval(() => {
+      //   if (toggle) {
+      //     document.getElementById("frontendClusterName").innerHTML = 'HQ1';
+      //     const statusElement = document.getElementById("connectionStatus")
+      //     statusElement.classList.remove("cluster-status-down")
+      //     statusElement.classList.add("cluster-status-up")
+      //     statusElement.innerHTML = "IS"
+      //     document.getElementById("backendClusterName").innerHTML = 'AWS-EAST'
+      //     document.getElementById("linkImg").src = "link_black_24dp.svg"
+      //     toggle = false
+      //   } else {
+      //     document.getElementById("frontendClusterName").innerHTML = '';
+      //     const statusElement = document.getElementById("connectionStatus")
+      //     statusElement.classList.remove("cluster-status-up")
+      //     statusElement.classList.add("cluster-status-down")
+      //     statusElement.innerHTML = "IS NOT"
+      //     document.getElementById("backendClusterName").innerHTML = ""
+      //     document.getElementById("linkImg").src = "link_off_black_24dp.svg"
+      //     toggle = true
+      //   }
+      // }, 2000)
+    </script>
 
     <script>
       var timer = 0
       // Update the timer every 1 second
       var x = setInterval(function() {
         timer = timer + 1
-        document.getElementById("timer").innerHTML = "Timer = " + timer;
+        document.getElementById("timer").innerHTML = timer;
       }, 1000);
     </script>
     <script src="/socket.io/socket.io.js"></script>
@@ -57,13 +177,23 @@
       socket.on('env', function(env) {
       // console.log(env);
       const envObj = JSON.parse(env)
-      document.getElementById("myClusterName").innerHTML = envObj.myClusterName;
-      if (envObj.backendClusterName && envObj.backendClusterName != "undefined") {
-        document.getElementById("isConnectedToBackend1").innerHTML = "It IS connected to a backend"
-        document.getElementById("isConnectedToBackend2").innerHTML = "... running in a Kubernetes cluster named <b> " + envObj.backendClusterName + " </b>"
+        document.getElementById("frontendClusterName").innerHTML = envObj.myClusterName;
+        if (envObj.backendClusterName && envObj.backendClusterName !== "undefined") {
+          const statusElement = document.getElementById("connectionStatus")
+          statusElement.classList.remove("cluster-status-down")
+          statusElement.classList.add("cluster-status-up")
+          statusElement.innerHTML = "IS"
+          document.getElementById("backendClusterStatus").innerHTML = '... running in a Kubernetes cluster named'
+          document.getElementById("backendClusterName").innerHTML = envObj.backendClusterName
+          document.getElementById("linkImg").src = "link_black_24dp.svg"
       } else {
-        document.getElementById("isConnectedToBackend1").innerHTML = "It IS NOT connected to a backend"
-        document.getElementById("isConnectedToBackend2").innerHTML = ""
+          const statusElement = document.getElementById("connectionStatus")
+          statusElement.classList.remove("cluster-status-up")
+          statusElement.classList.add("cluster-status-down")
+          statusElement.innerHTML = "IS NOT"
+          document.getElementById("backendClusterStatus").innerHTML = ''
+          document.getElementById("backendClusterName").innerHTML = ""
+          document.getElementById("linkImg").src = "link_off_black_24dp.svg"
       }
        
     });
